@@ -126,17 +126,17 @@ prompt() {
                 0) my_ps_host="${bold_orange}ssh:\h${normal}";
                    my_ps_user="${bold_red}\u${normal}";
                 ;;
-                *) my_ps_host="${yellow}ssh:\h${normal}"
-                   my_ps_user="${bold_green}\u${normal}";
+                *) my_ps_host="${bold_yellow}ssh:\h${normal}"
+                   my_ps_user="${green}\u${normal}";
                 ;;
             esac
 	else
             case "`id -u`" in
-                0) my_ps_host="${bold_yellow}\h${normal}"
+                0) my_ps_host="${green}\h${normal}"
                    my_ps_user="${bold_red}\u${normal}";
                 ;;
                 *) my_ps_host="${green}\h${normal}"
-                   my_ps_user="${bold_green}\u${normal}";
+                   my_ps_user="${green}\u${normal}";
                 ;;
             esac
         fi
