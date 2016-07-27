@@ -127,7 +127,7 @@ prompt() {
                    my_ps_user="${bold_red}\u${normal}";
                 ;;
                 *) my_ps_host="${yellow}ssh:\h${normal}"
-                   my_ps_user="${bold_orange}\u${normal}";
+                   my_ps_user="${bold_green}\u${normal}";
                 ;;
             esac
 	else
