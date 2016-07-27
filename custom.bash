@@ -58,7 +58,7 @@ function get_xserver ()
         aterm | rxvt)
         # Find some code that works here. ...
             ;;
-    esac  
+    esac
 }
 
 if [ -z ${DISPLAY:=""} ]; then
@@ -154,9 +154,9 @@ up ()
 cd ()
  {
  	if [ -n "$1" ]; then
- 		builtin cd "$@" && ls
+ 		builtin cd "$@" && ls -aFh --color=always
  	else
- 		builtin cd ~ && ls
+ 		builtin cd ~ && ls -aFh --color=always
  	fi
  }
 
@@ -290,4 +290,3 @@ function whatsmyip ()
 	# External IP Lookup
 	#echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
 }
-
