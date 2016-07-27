@@ -1,0 +1,2 @@
+
+echo $BASH_IT
