@@ -1,2 +1,2 @@
 # bash-it-sync
-#test
+# made to install and sync https://github.com/Bash-it/bash-it
