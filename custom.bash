@@ -5,35 +5,29 @@
 #######################################################
 
 # Use the best version of pico installed
-function edit ()
+edit ()
 {
-#	if [ "$(type -t jpico)" = "file" ]; then
-#		# Use JOE text editor http://joe-editor.sourceforge.net/
-#		jpico -nonotice -linums -nobackups "$@"
-#	elif [ "$(type -t nano)" = "file" ]; then
-	if [ "$(type -t nano)" = "file" ]; then
-		nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		pico "$@"
-	else
-#		nano "$@"
-		vim "$@"
-	fi
+    if [ "$(type -t nano)" = "file" ]; then
+        nano "$@"
+	echo "YO"
+    elif [ "$(type -t pico)" = "file" ]; then
+        pico "$@"
+	echo "ZO"
+    else
+#		nano $1
+        vim "$@"
+    fi
 }
 sedit ()
 {
-#	if [ "$(type -t jpico)" = "file" ]; then
-#		# Use JOE text editor http://joe-editor.sourceforge.net/
-#		sudo jpico -nonotice -linums -nobackups "$@"
-#	elif [ "$(type -t nano)" = "file" ]; then
-	if [ "$(type -t nano)" = "file" ]; then
-		sudo nano -c "$@"
-	elif [ "$(type -t pico)" = "file" ]; then
-		sudo pico "$@"
-	else
+    if [ "$(type -t nano)" = "file" ]; then
+        sudo nano "$@"
+    elif [ "$(type -t pico)" = "file" ]; then
+        sudo pico "$@"
+    else
 	#	sudo nano -w "$@"
-		sudo vim "$@"
-	fi
+        sudo vim "$@"
+    fi
 }
 
 #-------------------------------------------------------------
@@ -45,7 +39,7 @@ sedit ()
 # I have not found a 'universal' method yet.
 #-------------------------------------------------------------
 
-function get_xserver ()
+get_xserver ()
 {
     case $TERM in
        xterm )
