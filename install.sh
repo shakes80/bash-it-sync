@@ -5,7 +5,7 @@ echo "using --> BASH_IT VAR:$BASH_IT"
 
 source ~/.bashrc
 
-mkdir -p $BASH_IT/custom/themes/shakes
+mkdir -p $BASH_IT/themes/shakes
 ln -s -f ~/bash-it-sync/shakes.theme.bash $BASH_IT/themes/shakes/shakes.theme.bash
 ln -s -f ~/bash-it-sync/custom.bash $BASH_IT/lib/custom.bash
 ln -s -f ~/bash-it-sync/custom.aliases.bash $BASH_IT/aliases/custom.aliases.bash
