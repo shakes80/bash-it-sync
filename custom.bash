@@ -241,17 +241,18 @@ install_custom_support ()
 	elif [ $dtype == "suse" ]; then
 		sudo zypper install multitail
 		sudo zypper install tree
-		sudo zypper install joe
+#		sudo zypper install joe
 	elif [ $dtype == "debian" ]; then
-		sudo apt-get install multitail tree joe
+		sudo apt-get install multitail tree
+# joe
 	elif [ $dtype == "gentoo" ]; then
 		sudo emerge multitail
 		sudo emerge tree
-		sudo emerge joe
+#		sudo emerge joe
 	elif [ $dtype == "mandriva" ]; then
 		sudo urpmi multitail
 		sudo urpmi tree
-		sudo urpmi joe
+#		sudo urpmi joe
 	elif [ $dtype == "slackware" ]; then
 		echo "No install support for Slackware"
 	else
