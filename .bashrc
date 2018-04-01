@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# version 1.0.2
+# version 1.0.3
 # Path to the bash it configuration
 export BASH_IT="$HOME/.bash_it"
 
