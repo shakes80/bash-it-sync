@@ -287,3 +287,69 @@ function whatsmyip ()
 	# External IP Lookup
 	#echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
 }
+
+##################################################################
+# BashTips
+##################################################################
+function bashtips() {
+cat <<EOF
+Shell shortcuts
+
+Navigating the Bash shell is easy to do.  But it takes time to learn how to do well.  Below are a number of shortcuts that make the navigation process much more efficient.  
+
+This is a nice reference with more examples and features
+
+Ctrl + a => Return to the start of the command you’re typing
+Ctrl + e => Go to the end of the command you’re typing
+Ctrl + u => Cut everything before the cursor to a special clipboard
+Ctrl + k => Cut everything after the cursor to a special clipboard
+Ctrl + y => Paste from the special clipboard that Ctrl + u and Ctrl + k save their data to
+Ctrl + t => Swap the two characters before the cursor (you can actually use this to transport a character from the left to the right, try it!)
+Ctrl + w => Delete the word / argument left of the cursor
+Ctrl + l => Clear the screen
+Ctrl + _ => Undo previous key press
+Ctrl + xx => Toggle between current position and the start of the line
+There are some nice Alt key shortcuts in Linux as well.  You can map the alt key in OSX pretty easily to unlock these shortcuts.
+
+Alt + l => Uncapitalize the next word that the cursor is under (If the cursor is in the middle of the the word it will capitalize the last half of the word).
+Alt + u => Capitalize the word that the cursor is under
+Alt + t => Swap words or arguments that the cursor is under with the previous
+Alt + . => Paste the last word of the previous command
+Alt + b => Move backward one word
+Alt + f => Move forward one word
+Alt + r => Undo any changes that have been done to the current command
+Argument tricks
+
+Argument tricks can help to grow the navigation capabilities that Bash shortcuts provide and can even further speed up your effectiveness in the terminal.  Below is a list of special arguments that can be passed to any command that can be expanded into various commands.
+
+Repeating
+
+!! => Repeat the previous (full) command
+!foo => Repeat the most recent command that starts with ‘foo‘ (e.g. !ls)
+!^ => Repeat the first argument of the previous command
+!$ => Repeat the last argument of the previous command
+!* => Repeat all arguments of last command
+!:<number> => Repeat a specifically positioned argument
+!:1-2 => Repeat a range of arguments
+
+Printing
+
+!$:p => Print out the word that !$ would substitute
+!*:p => Print out the previous command except for the last word
+!foo:p =>Print out the command that !foo would run
+Special parameters
+
+When writing scripts , there are a number of special parameters you can feed into the shell.  This can be convenient for doing lots of different things in scripts.  Part of the fun of writing scripts and automating things is discovering creative ways to fit together the various pieces of the puzzle in elegant ways.  The “special” parameters listed below can be seen as pieces of the puzzle, and can be very powerful building blocks in your scripts.
+
+Here is a full reference from the Bash documentation
+
+$* => Expand parameters. Expands to a single word for each parameter separated by IFS delimeter – think spaces
+$@ => Expand parameters. Each parameter expand to a separate word, enclosed by “” –  think arrays
+$# => Expand the number of parameters of a command
+$? => Expand the exit status of the previous command
+$$ => Expand the pid of the shell
+$! => Expand the pid of the most recent command
+$0 => Expand the name of the shell or script
+$_ => Expand the last previous argument
+EOF
+}
