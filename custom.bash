@@ -314,11 +314,6 @@ function clearIptables()
 iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; iptables -F; iptables -X; iptables -L
 }
 
-###### online check
-function connected() { ping -c1 -w2 google.com > /dev/null 2>&1; }
-
-function connected_() { rm -f /tmp/connect; http_proxy='http://a.b.c.d:8080' wget -q -O /tmp/connect http://www.google.com; if [[ -s /tmp/connect ]]; then return 0; else return 1; fi; }
-
 ###### check if a remote port is up using dnstools.com
 # (i.e. from behind a firewall/proxy)
 function cpo() { [[ $# -lt 2 ]] && echo 'need IP and port' && return 2; [[ `wget -q "http://dnstools.com/?count=3&checkp=on&portNum=$2&target=$1&submit=Go\!" -O - |grep -ic "Connected successfully to port $2"` -gt 0 ]] && echo OPEN || echo CLOSED; }
@@ -327,26 +322,6 @@ function cpo() { [[ $# -lt 2 ]] && echo 'need IP and port' && return 2; [[ `wget
 function findtcp()
 {
 (netstat  -atn | awk '{printf "%s\n%s\n", $4, $4}' | grep -oE '[0-9]*$'; seq 32768 61000) | sort -n | uniq -u | head -n 1
-}
-
-###### geoip lookup (need geoip database: sudo apt-get install geoip-bin)
-function geoip() {
-geoiplookup $1
-}
-
-###### geoip information
-# requires 'html2text': sudo apt-get install html2text
-function geoiplookup() { curl -A "Mozilla/5.0" -s "http://www.geody.com/geoip.php?ip=$1" | grep "^IP.*$1" | html2text; }
-
-###### get IP address of a given interface
-# Example: getip lo
-# Example: getip eth0	# this is the default
-function getip()		{ lynx -dump http://whatismyip.org/; }
-
-###### display private IP
-function ippriv()
-{
-    ifconfig eth0|grep "inet adr"|awk '{print $2}'|awk -F ':' '{print $2}'
 }
 
 ###### ifconfig connection check
@@ -359,44 +334,10 @@ function ips()
     fi
 }
 
-###### geolocate a given IP address
-function ip2loc() { wget -qO - www.ip2location.com/$1 | grep "<span id=\"dgLookup__ctl2_lblICountry\">" | sed 's/<[^>]*>//g; s/^[\t]*//; s/&quot;/"/g; s/</</g; s/>/>/g; s/&amp;/\&/g'; }
-
 ###### myip - finds your current IP if your connected to the internet
 function myip()
 {
 lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org:8245/ | awk '{ print $4 }' | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g'
-}
-
-###### check whether or not a port on your box is open
-function portcheck() { for i in $@;do curl -s "deluge-torrent.org/test-port.php?port=$i" | sed '/^$/d;s/<br><br>/ /g';done; }
-
-###### show Url information
-# Usage:	url-info "ur"
-# This script is part of nixCraft shell script collection (NSSC)
-# Visit http://bash.cyberciti.biz/ for more information.
-# Modified by Silviu Silaghi (http://docs.opensourcesolutions.ro) to handle
-# more ip adresses on the domains on which this is available (eg google.com or yahoo.com)
-# Last updated on Sep/06/2010
-function url-info()
-{
-doms=$@
-if [ $# -eq 0 ]; then
-echo -e "No domain given\nTry $0 domain.com domain2.org anyotherdomain.net"
-fi
-for i in $doms; do
-_ip=$(host $i|grep 'has address'|awk {'print $4'})
-if [ "$_ip" == "" ]; then
-echo -e "\nERROR: $i DNS error or not a valid domain\n"
-continue
-fi
-ip=`echo ${_ip[*]}|tr " " "|"`
-echo -e "\nInformation for domain: $i [ $ip ]\nQuerying individual IPs"
- for j in ${_ip[*]}; do
-echo -e "\n$j results:"
-whois $j |egrep -w 'OrgName:|City:|Country:|OriginAS:|NetRange:'
-done
-done
 }
 
 ##################################################
@@ -430,14 +371,7 @@ function batchexec()
 find . -type f -iname '*.'${1}'' -exec ${@:2}  {} \; ;
 }
 
-##################################################
-# What package does that command come from?	 #
-##################################################
 
-function cmdpkg() { PACKAGE=$(dpkg -S $(which $1) | cut -d':' -f1); echo "[${PACKAGE}]"; dpkg -s "${PACKAGE}" ;}
-##################################################################
-# BashTips
-##################################################################
 function bashtips() {
 cat <<EOF
 Shell shortcuts
