@@ -343,8 +343,8 @@ When writing scripts , there are a number of special parameters you can feed int
 
 Here is a full reference from the Bash documentation
 
-'$*' => Expand parameters. Expands to a single word for each parameter separated by IFS delimeter – think spaces
-'$@' => Expand parameters. Each parameter expand to a separate word, enclosed by “” –  think arrays
+%q* => Expand parameters. Expands to a single word for each parameter separated by IFS delimeter – think spaces
+%q@ => Expand parameters. Each parameter expand to a separate word, enclosed by “” –  think arrays
 $# => Expand the number of parameters of a command
 $? => Expand the exit status of the previous command
 $$ => Expand the pid of the shell
