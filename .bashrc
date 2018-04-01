@@ -49,4 +49,7 @@ export SCM_CHECK=true
 # export BASH_IT_AUTOMATIC_RELOAD_AFTER_CONFIG_CHANGE=1
 
 # Load Bash It
+
+cd ~/bash-it-sync && ./update.sh && cd ~
+
 source "$BASH_IT"/bash_it.sh
