@@ -288,6 +288,184 @@ function whatsmyip ()
 	#echo -n "External IP: " ; wget http://smart-ip.net/myip -O - -q
 }
 
+##################################################
+# Text alignment				 #
+##################################################
+
+###### center text in console with simple pipe like
+function align_center() { l="$(cat -)"; s=$(echo -e "$l"| wc -L); echo "$l" | while read l;do j=$(((s-${#l})/2));echo "$(while ((--j>0)); do printf " ";done;)$l";done;} #; ls --color=none / | center
+
+###### right-align text in console using pipe like ( command | right )
+function align_right() { l="$(cat -)"; [ -n "$1" ] && s=$1 || s=$(echo -e "$l"| wc -L); echo "$l" | while read l;do j=$(((s-${#l})));echo "$(while ((j-->0)); do printf " ";done;)$l";done;} #; ls --color=none / | right 150
+
+##################################################
+# Network information and IP address stuff	 #
+##################################################
+
+###### get all IPs via ifconfig
+function allips()
+{
+ifconfig | awk '/inet / {sub(/addr:/, "", $2); print $2}'
+}
+
+###### clear iptables rules safely
+function clearIptables()
+{
+iptables -P INPUT ACCEPT; iptables -P FORWARD ACCEPT; iptables -P OUTPUT ACCEPT; iptables -F; iptables -X; iptables -L
+}
+
+###### online check
+function connected() { ping -c1 -w2 google.com > /dev/null 2>&1; }
+
+function connected_() { rm -f /tmp/connect; http_proxy='http://a.b.c.d:8080' wget -q -O /tmp/connect http://www.google.com; if [[ -s /tmp/connect ]]; then return 0; else return 1; fi; }
+
+###### check if a remote port is up using dnstools.com
+# (i.e. from behind a firewall/proxy)
+function cpo() { [[ $# -lt 2 ]] && echo 'need IP and port' && return 2; [[ `wget -q "http://dnstools.com/?count=3&checkp=on&portNum=$2&target=$1&submit=Go\!" -O - |grep -ic "Connected successfully to port $2"` -gt 0 ]] && echo OPEN || echo CLOSED; }
+
+###### find an unused unprivileged TCP port
+function findtcp()
+{
+(netstat  -atn | awk '{printf "%s\n%s\n", $4, $4}' | grep -oE '[0-9]*$'; seq 32768 61000) | sort -n | uniq -u | head -n 1
+}
+
+###### geoip lookup (need geoip database: sudo apt-get install geoip-bin)
+function geoip() {
+geoiplookup $1
+}
+
+###### geoip information
+# requires 'html2text': sudo apt-get install html2text
+function geoiplookup() { curl -A "Mozilla/5.0" -s "http://www.geody.com/geoip.php?ip=$1" | grep "^IP.*$1" | html2text; }
+
+###### get IP address of a given interface
+# Example: getip lo
+# Example: getip eth0	# this is the default
+function getip()		{ lynx -dump http://whatismyip.org/; }
+
+###### display private IP
+function ippriv()
+{
+    ifconfig eth0|grep "inet adr"|awk '{print $2}'|awk -F ':' '{print $2}'
+}
+
+###### ifconfig connection check
+function ips()
+{
+    if [ "$OS" = "Linux" ]; then
+        for i in $( /sbin/ifconfig | grep ^e | awk '{print $1}' | sed 's/://' ); do echo -n "$i: ";  /sbin/ifconfig $i | perl -nle'/dr:(\S+)/ && print $1'; done
+    elif [ "$OS" = "Darwin" ]; then
+        for i in $( /sbin/ifconfig | grep ^e | awk '{print $1}' | sed 's/://' ); do echo -n "$i: ";  /sbin/ifconfig $i | perl -nle'/inet (\S+)/ && print $1'; done
+    fi
+}
+
+###### geolocate a given IP address
+function ip2loc() { wget -qO - www.ip2location.com/$1 | grep "<span id=\"dgLookup__ctl2_lblICountry\">" | sed 's/<[^>]*>//g; s/^[\t]*//; s/&quot;/"/g; s/</</g; s/>/>/g; s/&amp;/\&/g'; }
+
+###### myip - finds your current IP if your connected to the internet
+function myip()
+{
+lynx -dump -hiddenlinks=ignore -nolist http://checkip.dyndns.org:8245/ | awk '{ print $4 }' | sed '/^$/d; s/^[ ]*//g; s/[ ]*$//g'
+}
+
+###### check whether or not a port on your box is open
+function portcheck() { for i in $@;do curl -s "deluge-torrent.org/test-port.php?port=$i" | sed '/^$/d;s/<br><br>/ /g';done; }
+
+###### show Url information
+# Usage:	url-info "ur"
+# This script is part of nixCraft shell script collection (NSSC)
+# Visit http://bash.cyberciti.biz/ for more information.
+# Modified by Silviu Silaghi (http://docs.opensourcesolutions.ro) to handle
+# more ip adresses on the domains on which this is available (eg google.com or yahoo.com)
+# Last updated on Sep/06/2010
+function url-info()
+{
+doms=$@
+if [ $# -eq 0 ]; then
+echo -e "No domain given\nTry $0 domain.com domain2.org anyotherdomain.net"
+fi
+for i in $doms; do
+_ip=$(host $i|grep 'has address'|awk {'print $4'})
+if [ "$_ip" == "" ]; then
+echo -e "\nERROR: $i DNS error or not a valid domain\n"
+continue
+fi
+ip=`echo ${_ip[*]}|tr " " "|"`
+echo -e "\nInformation for domain: $i [ $ip ]\nQuerying individual IPs"
+ for j in ${_ip[*]}; do
+echo -e "\n$j results:"
+whois $j |egrep -w 'OrgName:|City:|Country:|OriginAS:|NetRange:'
+done
+done
+}
+
+##################################################
+# Show all strings (ASCII & Unicode) in a file	 #
+##################################################
+
+function allStrings() { cat "$1" | tr -d "\0" | strings ; }
+
+##################################################
+# Ask						 #
+##################################################
+
+function ask()
+{
+    echo -n "$@" '[y/n] ' ; read ans
+    case "$ans" in
+        y*|Y*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+##################################################
+# Execute a given Linux command on a group of	 #
+# files						 #
+##################################################
+
+###### Example: batchexec sh ls		# lists all files that have the extension 'sh'
+# Example: batchexec sh chmod 755	# 'chmod 755' all files that have the extension 'sh'
+function batchexec()
+{
+find . -type f -iname '*.'${1}'' -exec ${@:2}  {} \; ;
+}
+
+##################################################
+# What package does that command come from?	 #
+##################################################
+
+function cmdpkg() { PACKAGE=$(dpkg -S $(which $1) | cut -d':' -f1); echo "[${PACKAGE}]"; dpkg -s "${PACKAGE}" ;}
+##################################################
+# Extract - extract most common compression	 #
+# types						 #
+##################################################
+
+function extract() {
+  local e=0 i c
+  for i; do
+    if [[ -f $i && -r $i ]]; then
+        c=''
+        case $i in
+          *.t@(gz|lz|xz|b@(2|z?(2))|a@(z|r?(.@(Z|bz?(2)|gz|lzma|xz)))))
+                 c='bsdtar xvf' ;;
+          *.7z)  c='7z x'       ;;
+          *.Z)   c='uncompress' ;;
+          *.bz2) c='bunzip2'    ;;
+          *.exe) c='cabextract' ;;
+          *.gz)  c='gunzip'     ;;
+          *.rar) c='unrar x'    ;;
+          *.xz)  c='unxz'       ;;
+          *.zip) c='unzip'      ;;
+          *)     echo "$0: cannot extract \`$i': Unrecognized file extension" >&2; e=1 ;;
+        esac
+        [[ $c ]] && command $c "$i"
+    else
+        echo "$0: cannot extract \`$i': File is unreadable" >&2; e=2
+    fi
+  done
+  return $e
+}
+
 ##################################################################
 # BashTips
 ##################################################################
