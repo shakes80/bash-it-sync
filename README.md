@@ -10,5 +10,7 @@ cd ~/bash-it-sync
 ./install.sh
 ```
 
-
-if you want custom bash aliases or custom bash commands, simply edit the files in `~/bash-it-sync`
+Optional: for more secure logout run
+```
+./install_secure_logout.sh
+```
