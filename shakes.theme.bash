@@ -123,19 +123,19 @@ prompt() {
     local SSH2_IP=`echo $SSH2_CLIENT | awk '{ print $1 }'`
         if [ $SSH2_IP ] || [ $SSH_IP ] ; then
             case "`id -u`" in
-                0) my_ps_host="${bold_orange}ssh:\h${normal}";
+                0) my_ps_host="${bold_orange}ssh:\H${normal}";
                    my_ps_user="${bold_red}\u${normal}";
                 ;;
-                *) my_ps_host="${bold_yellow}ssh:\h${normal}"
+                *) my_ps_host="${bold_yellow}ssh:\H${normal}"
                    my_ps_user="${green}\u${normal}";
                 ;;
             esac
 	else
             case "`id -u`" in
-                0) my_ps_host="${green}\h${normal}"
+                0) my_ps_host="${green}\H${normal}"
                    my_ps_user="${bold_red}\u${normal}";
                 ;;
-                *) my_ps_host="${green}\h${normal}"
+                *) my_ps_host="${green}\H${normal}"
                    my_ps_user="${green}\u${normal}";
                 ;;
             esac
