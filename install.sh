@@ -1,6 +1,7 @@
+export BASH_IT="$HOME/.bash_it"
+
 git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
 ~/.bash_it/install.sh
-export BASH_IT="$HOME/.bash_it"
 
 echo "using --> BASH_IT VAR:$BASH_IT"
 
